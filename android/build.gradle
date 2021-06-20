@@ -1,0 +1,68 @@
+group 'com.example.face_recognition'
+version '1.0'
+
+
+def getCurrentProjectDir() {
+    String result = ""
+    rootProject.allprojects { project ->
+        if (project.properties.get("identityPath").toString() == ":face_recognition") { // 这里是flutter的约定, 插件的module名是插件名, :是gradle的约定. project前加:
+            result = project.properties.get("projectDir").toString()
+        }
+    }
+    return result
+}
+
+buildscript {
+    repositories {
+        google()
+        jcenter()
+       
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.0'
+    }
+}
+
+rootProject.allprojects {
+    def dir = getCurrentProjectDir()
+    repositories {
+        google()
+        jcenter()
+        maven { // 添加这个指向本地的仓库目录
+            url "$dir/libs"
+        }
+    }
+}
+
+apply plugin: 'com.android.library'
+
+
+android {
+    compileSdkVersion 30
+
+    defaultConfig {
+        minSdkVersion 16
+    }
+
+    sourceSets.main {
+        jniLibs.srcDirs = ["libs"]
+    }
+
+    repositories{
+        flatDir{
+            dirs 'libs'
+        }
+    }
+
+    lintOptions {
+        checkReleaseBuilds false
+        abortOnError false
+    }
+}
+
+
+dependencies {
+    implementation "com.meglive:sdk:3.0.9"
+    implementation 'androidx.annotation:annotation:1.0.2'
+}

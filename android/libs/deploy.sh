@@ -1,0 +1,1 @@
+mvn deploy:deploy-file -Dfile=meglive_still.aar -Durl="file://." -DgroupId="com.meglive" -DartifactId="sdk" -Dversion="3.0.9"
